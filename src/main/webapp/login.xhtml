@@ -29,8 +29,8 @@
 	
 		<p:layoutUnit position="center" style="width:200; border-width:0px;">
 	<center>		
-		<h:form>
-		<p:growl id=""></p:growl>
+		<h:form id="form">
+		<p:growl id="dlg"></p:growl>
 		
 		<p:panel header="Authentification">
 		
@@ -38,15 +38,15 @@
 		
 		<h:outputText value="Nom d'utilisateur" />
 		<p:inputText id="username" value="#{userMBean.username}" required="true" requiredMessage="Identifiant obligatoire"></p:inputText>
-		<h:message for="username" style="color:red"/>
+		<p:message id="msg1"  for="username" style="color:red"/>
 		
 		<h:outputText value="Mot de passe" />
 		<p:password id="pwd" value="#{userMBean.pwd}" required="true" requiredMessage="mot de passe obligatoire"></p:password> 
-		<h:message for="pwd" style="color:red"/>
+		<p:message id="msg2" for="pwd" style="color:red"/>
 		
-		<h:commandButton value="login" actionListener="#{userMBean.login}" ></h:commandButton>
+		<p:commandButton value="login" action="#{userMBean.login}"  update="form:msg1,form:msg2"></p:commandButton>
 		
-		<h:commandButton value="Annuler" type="reset"></h:commandButton>
+		<p:commandButton value="Annuler" type="reset"></p:commandButton>
 		
 		</p:panelGrid>
 		

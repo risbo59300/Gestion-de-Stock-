@@ -10,21 +10,34 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import fr.gestionStock.dao.CategorieDao;
-import fr.gestionStock.dao.CategorieDaoImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import fr.gestionStock.persistance.entities.Categorie;
+import fr.gestionStock.persistance.service.CategorieService;
 
 @ManagedBean
 @SessionScoped
+@Component
 public class CategorieMBean 
 {
 	private Categorie cat = new Categorie();
 	private Categorie selectcat = new Categorie();
 	
-	CategorieDao catDaoImpl = new CategorieDaoImpl();
+	@Autowired
+	CategorieService categorieService;
 	
+	public CategorieService getCategorieService() {
+		return categorieService;
+	}
+
+	public void setCategorieService(CategorieService categorieService) {
+		this.categorieService = categorieService;
+	}
+
 	private List<Categorie> listCategories = new ArrayList<Categorie>();
 	
+	private String msg;
 	
 	/**
 	 * @return the cat
@@ -61,25 +74,14 @@ public class CategorieMBean
 	/**
 	 * @return the catDaoImpl
 	 */
-	public CategorieDao getCatDaoImpl() 
-	{
-		return catDaoImpl;
-	}
-
-	/**
-	 * @param catDaoImpl the catDaoImpl to set
-	 */
-	public void setCatDaoImpl(CategorieDao catDaoImpl) 
-	{
-		this.catDaoImpl = catDaoImpl;
-	}
+	
 
 	/**
 	 * @return the listCategories
 	 */
 	public List<Categorie> getListCategories() 
 	{
-		listCategories = catDaoImpl.findAll();
+		listCategories = categorieService.findAll();
 		return listCategories;
 	}
 
@@ -93,7 +95,7 @@ public class CategorieMBean
 
 	public void addCategorie(ActionEvent e) 
 	{
-		catDaoImpl.add(cat);
+		categorieService.add(cat);
 		cat = new Categorie();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ajout categorie effectué avec succès"));
 	}
@@ -102,11 +104,12 @@ public class CategorieMBean
 	{
 		if (selectcat == null || selectcat.getIdcateg() == new BigDecimal(0))
 		{
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Veuillez selectionner une categorie à supprimer!"));
+			System.out.println("Veuillez selectionner une categorie à supprimer!");
+			 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Veuillez selectionner une categorie à supprimer!"));
 		}
 		else
 		{
-		catDaoImpl.delete(selectcat);
+			categorieService.delete(selectcat);
 		
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Suppression categorie effectué avec succès"));
 		}
@@ -119,10 +122,24 @@ public class CategorieMBean
 	
 	public String updateCategorie() 
 	{
-		catDaoImpl.update(selectcat);
+		categorieService.update(selectcat);
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("categorie modifier effectué avec succès"));
 
 		return "showCategorie.xhtml";
 		
+	}
+
+	/**
+	 * @return the msg
+	 */
+	public String getMsg() {
+		return msg;
+	}
+
+	/**
+	 * @param msg the msg to set
+	 */
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 }

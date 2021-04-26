@@ -28,7 +28,7 @@
 		>
 	<property name="dataSource" ref="dataSource"></property>
 	<property name="jpaVendorAdapter" ref="jpa"></property>
-	<property name="packagesToScan" value="formation.persistance.entities"></property>
+	<property name="packagesToScan" value="fr.gestionStock.persistance.entities"></property>
 </bean>
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"></bean>

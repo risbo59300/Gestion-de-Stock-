@@ -13,7 +13,7 @@
 		<p:layoutUnit position="north" size="200">
 
 			<marquee> <h:outputText style="color:blue" value="Bienvenue dans notre magasin" /></marquee>
-			<ui:include src="/menuHNordUser.xhtml" /> 
+			<ui:include src="#{userMBean.menu}" /> 
 		</p:layoutUnit>
 		
 		<p:layoutUnit position="south" size="100">
@@ -42,7 +42,7 @@
 	<h:outputText value="Mot de passe" />
 	<h:inputText value="#{userMBean.user.password}" />
 	
-	<h:commandButton actionListener="#{userMBean.addUser}" value="Ajouter" />
+	<p:commandButton action="#{userMBean.addUser}" value="Ajouter" />
 	
 </h:panelGrid>
 <p:growl ></p:growl>

@@ -13,7 +13,7 @@
 		<p:layoutUnit position="north" size="200">
 
 			<marquee> <h:outputText style="color:blue" value="Bienvenue dans notre magasin" /></marquee>
-			<ui:include src="/menuHNordAdmin.xhtml" />
+			<ui:include src="#{userMBean.menu}" />
 		</p:layoutUnit>
 		
 		<p:layoutUnit position="south" size="100">
@@ -28,7 +28,11 @@
 		
 		<p:layoutUnit position="center" style="width:200; border-width:0px;">
 		<h:form >
-		<p:dataTable value="#{categorieMBean.listCategories}" var="cate" selection="#{categorieMBean.selectcat}" selectionMode="single" rowKey="#{cate.idcateg}">
+		
+		<p:growl showDetail="#{categorieMBean.selectcat}"></p:growl>
+		
+		<p:dataTable value="#{categorieMBean.listCategories}" var="cate" 
+		selection="#{categorieMBean.selectcat}" selectionMode="single" rowKey="#{cate.idcateg}">
 		
 	<p:column headerText="Id Catégorie"> 
 	<h:outputText value="#{cate.idcateg}" />
@@ -50,7 +54,6 @@
 	<p:commandButton value="Editer" oncomplete="PF('dlgUpdate').show()" update="Myformca:dlgUpdate" />
 	</p:column>
 	
-<p:growl ></p:growl>
 </p:dataTable>
 </h:form>
 		

@@ -13,7 +13,7 @@
 		<p:layoutUnit position="north" size="200">
 
 			<marquee> <h:outputText style="color:blue" value="Bienvenue dans notre magasin" /></marquee>
-			<ui:include src="/menuHNordUser.xhtml" />
+			<ui:include src="#{userMBean.menu}" />
 		</p:layoutUnit>
 		
 		<p:layoutUnit position="south" size="100">

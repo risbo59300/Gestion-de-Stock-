@@ -10,19 +10,32 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import fr.gestionStock.dao.ProduitDao;
-import fr.gestionStock.dao.ProduitDaoImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import fr.gestionStock.persistance.entities.Produit;
+import fr.gestionStock.persistance.service.ProduitService;
 
 @ManagedBean
 @SessionScoped
+@Component
 public class ProduitMBean 
 {
 	private  Produit prod = new  Produit();
 	private  Produit selectprod = new  Produit();
 	
-	ProduitDao prodDaoImpl = new  ProduitDaoImpl();
+	@Autowired
+	ProduitService produitService;
 	
+	
+	public ProduitService getProduitService() {
+		return produitService;
+	}
+
+	public void setProduitService(ProduitService produitService) {
+		this.produitService = produitService;
+	}
+
 	private List< Produit> listProduits = new ArrayList< Produit>();
 	
 	/**
@@ -54,24 +67,10 @@ public class ProduitMBean
 	}
 
 	/**
-	 * @return the prodDaoImpl
-	 */
-	public ProduitDao getProdDaoImpl() {
-		return prodDaoImpl;
-	}
-
-	/**
-	 * @param prodDaoImpl the prodDaoImpl to set
-	 */
-	public void setProdDaoImpl(ProduitDao prodDaoImpl) {
-		this.prodDaoImpl = prodDaoImpl;
-	}
-
-	/**
 	 * @return the listProduits
 	 */
 	public List<Produit> getListProduits() {
-		listProduits = prodDaoImpl.findAll();
+		listProduits = produitService.findAll();
 		return listProduits;
 	}
 
@@ -84,22 +83,22 @@ public class ProduitMBean
 
 	public void addProduit(ActionEvent e) 
 	{
-		prodDaoImpl.add(prod);
+		produitService.add(prod);
 		prod = new Produit();
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ajout produit effectué avec succès"));
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ajout produit effectuÃ© avec succÃ¨s"));
 	}
 	
 	public void deleteProduit(ActionEvent e) 
 	{
 		if (selectprod == null || selectprod.getIdproduit() == new BigDecimal(0))
 		{
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Veuillez selectionner un produit à supprimer!"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Veuillez selectionner un produit Ã  supprimer!"));
 		}
 		else
 		{
-		prodDaoImpl.delete(selectprod);
+			produitService.delete(selectprod);
 		
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Suppression produit effectué avec succès"));
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Suppression produit effectuÃ© avec succÃ¨s"));
 		}
 	}
 	
@@ -110,8 +109,8 @@ public class ProduitMBean
 	
 	public String updateProduit() 
 	{
-		prodDaoImpl.update(selectprod);
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("produit modifier effectué avec succès"));
+		produitService.update(selectprod);
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("produit modifier effectuÃ© avec succÃ¨s"));
 
 		return "showProduit.xhtml";
 		

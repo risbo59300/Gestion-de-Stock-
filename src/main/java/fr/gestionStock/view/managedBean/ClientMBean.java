@@ -10,23 +10,36 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import fr.gestionStock.dao.ClientDao;
-import fr.gestionStock.dao.ClientDaoImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import fr.gestionStock.persistance.entities.Client;
+import fr.gestionStock.persistance.service.ClientService;
 
 @ManagedBean
 @SessionScoped
+@Component
 public class ClientMBean 
 {
 	private Client client = new Client();
 	private Client selectclient = new Client();
 	
-	ClientDao clientDaoImpl = new ClientDaoImpl();
+	@Autowired
+	ClientService clientService;
 	
+	
+	public ClientService getClientService() {
+		return clientService;
+	}
+
+	public void setClientService(ClientService clientService) {
+		this.clientService = clientService;
+	}
+
 	private List<Client> listClients = new ArrayList<Client>();
 	
 	public List<Client> getListClients() {
-		listClients = clientDaoImpl.findAll();
+		listClients = clientService.findAll();
 		return listClients;
 	}
 	
@@ -75,7 +88,7 @@ public class ClientMBean
 
 
 	public void addClient(ActionEvent e) {
-		clientDaoImpl.add(client);
+		clientService.add(client);
 		client = new Client();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ajout client effectué avec succès"));
 	}
@@ -83,11 +96,11 @@ public class ClientMBean
 	public void deleteClient(ActionEvent e) {
 		if (selectclient == null || selectclient.getIdclient() == new BigDecimal(0))
 		{
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Veuillez selectionner un client à supprimer!"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Veuillez selectionner un client à  supprimer!"));
 		}
 		else
 		{
-		clientDaoImpl.delete(selectclient);
+			clientService.delete(selectclient);
 		
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Suppression client effectué avec succès"));
 		}
@@ -98,7 +111,7 @@ public class ClientMBean
 	}
 	
 	public String updateClient() {
-		clientDaoImpl.update(selectclient);
+		clientService.update(selectclient);
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Suppression client effectué avec succès"));
 
 		return "showClient.xhtml";
@@ -106,7 +119,7 @@ public class ClientMBean
 	
 	public void search(ActionEvent e) {
 
-	    listClients = clientDaoImpl.findClientBynom(nom);
+	    listClients = clientService.findByPrenomclientOrNomclientOrDatenaissanceclient(nom, nom, nom);
 	        }
 
 }

@@ -10,25 +10,31 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.primefaces.model.chart.LineChartModel;
-import org.primefaces.model.charts.ChartData;
-import org.primefaces.model.charts.pie.PieChartDataSet;
-import org.primefaces.model.charts.pie.PieChartModel;
-import org.primefaces.model.charts.polar.PolarAreaChartModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import fr.gestionStock.dao.CommandeDao;
-import fr.gestionStock.dao.CommandeDaoImpl;
 import fr.gestionStock.persistance.entities.Commande;
+import fr.gestionStock.persistance.service.CommandeService;
 
 @ManagedBean
 @SessionScoped
+@Component
 public class CommandeMBean
 {
 	private  Commande com = new  Commande();
 	private  Commande selectcom = new  Commande();
 	
-	 CommandeDao comDaoImpl = new  CommandeDaoImpl();
+	@Autowired
+	 CommandeService commandeService;
 	
+	public CommandeService getCommandeService() {
+		return commandeService;
+	}
+
+	public void setCommandeService(CommandeService commandeService) {
+		this.commandeService = commandeService;
+	}
+
 	private List< Commande> listCommandes = new ArrayList< Commande>();
 	
 	/**
@@ -59,25 +65,12 @@ public class CommandeMBean
 		this.selectcom = selectcom;
 	}
 
-	/**
-	 * @return the comDaoImpl
-	 */
-	public CommandeDao getComDaoImpl() {
-		return comDaoImpl;
-	}
-
-	/**
-	 * @param comDaoImpl the comDaoImpl to set
-	 */
-	public void setComDaoImpl(CommandeDao comDaoImpl) {
-		this.comDaoImpl = comDaoImpl;
-	}
 
 	/**
 	 * @return the listCommandes
 	 */
 	public List<Commande> getListCommandes() {
-		listCommandes = comDaoImpl.findAll();
+		listCommandes = commandeService.findAll();
 		return listCommandes;
 	}
 
@@ -90,7 +83,7 @@ public class CommandeMBean
 
 	public void addCommande(ActionEvent e) 
 	{
-		comDaoImpl.add(com);
+		commandeService.add(com);
 		com = new Commande();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ajout commande effectué avec succès"));
 	}
@@ -103,7 +96,7 @@ public class CommandeMBean
 		}
 		else
 		{
-		comDaoImpl.delete(selectcom);
+			commandeService.delete(selectcom);
 		
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Suppression commande effectué avec succès"));
 		}
@@ -116,7 +109,7 @@ public class CommandeMBean
 	
 	public String updateCommande() 
 	{
-		comDaoImpl.update(selectcom);
+		commandeService.update(selectcom);
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("commande modifier effectué avec succès"));
 
 		return "showCommande.xhtml";
